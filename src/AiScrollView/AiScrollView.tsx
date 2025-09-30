@@ -1,5 +1,5 @@
 import { useLayoutEffect } from "react";
-import useMap from "../hooks/use-map";
+import useWeakMap from "../hooks/use-weak-map";
 import styles from "./AiScrollView.module.css";
 
 export type AiScrollViewItem = {
@@ -13,7 +13,7 @@ export type AiScrollViewProps = {
 };
 
 export default function AiScrollView({ items, maxItemsToRender }: AiScrollViewProps) {
-  const itemRefs = useMap<AiScrollViewItem, HTMLDivElement>();
+  const itemRefs = useWeakMap<AiScrollViewItem, HTMLDivElement>();
 
   useLayoutEffect(() => {
     if (items.length === 0) return;
@@ -50,7 +50,7 @@ export default function AiScrollView({ items, maxItemsToRender }: AiScrollViewPr
       {items.map((item) => (
         <div
           ref={(domElement) => {
-            domElement !== null ? itemRefs.set(item, domElement) : itemRefs.delete(item);
+            domElement !== null && itemRefs.set(item, domElement);
           }}
           key={item.id}
           className={styles.item}
