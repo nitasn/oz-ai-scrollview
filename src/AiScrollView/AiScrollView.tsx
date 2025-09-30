@@ -12,6 +12,9 @@ export type AiScrollViewProps = {
   maxItemsToRender: number;
 };
 
+/**
+ * If `items.length` is `maxItemsToRender + 1`, the oldest item will be faded out.
+ */
 export default function AiScrollView({ items, maxItemsToRender }: AiScrollViewProps) {
   const itemRefs = useWeakMap<AiScrollViewItem, HTMLDivElement>();
 
@@ -28,19 +31,24 @@ export default function AiScrollView({ items, maxItemsToRender }: AiScrollViewPr
       accumHeight += elementHeights[i];
     }
 
+    // transistion duration depends on the height of the new item
+    const translateTransistionConfig: KeyframeAnimationOptions = {
+      duration: elementHeights[items.length - 1] * 3 + 250,
+      easing: "ease",
+      fill: "forwards",
+    };
+
     requestAnimationFrame(() => {
       // set final positions (last item at bottom) with a transition
       let accumHeight = 0;
       for (let i = items.length - 1; i >= 0; i--) {
-        domElements[i].animate([{ bottom: `${accumHeight}px` }], translateTransitionConfig);
+        domElements[i].animate([{ bottom: `${accumHeight}px` }], translateTransistionConfig);
         accumHeight += elementHeights[i];
       }
 
-      // fade out any excess items
-      if (items.length > maxItemsToRender) {
-        for (let i = 0; i < items.length - maxItemsToRender; i++) {
-          domElements[i].animate([{ opacity: 0 }], opacityTransitionConfig);
-        }
+      // if one excess item, fade it out
+      if (items.length === maxItemsToRender + 1) {
+        domElements[0].animate([{ opacity: 0 }], fadeoutTransitionConfig);
       }
     });
   }, [items]);
@@ -62,13 +70,7 @@ export default function AiScrollView({ items, maxItemsToRender }: AiScrollViewPr
   );
 }
 
-const translateTransitionConfig: KeyframeAnimationOptions = {
-  duration: 600,
-  easing: "ease",
-  fill: "forwards",
-};
-
-const opacityTransitionConfig: KeyframeAnimationOptions = {
+const fadeoutTransitionConfig: KeyframeAnimationOptions = {
   duration: 500,
   easing: "ease-in-out",
   fill: "forwards",

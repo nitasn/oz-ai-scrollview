@@ -13,6 +13,7 @@ export default function App() {
 
   const addMessage = () => {
     setMessages((messages) => {
+      // the new array's size will be at most MAX_MESSAGES_TO_RENDER + 1
       const newArray = messages.slice(-MAX_MESSAGES_TO_RENDER);
       newArray.push({ id: newId(), text: generateRandomSentence({ minWords: 3, maxWords: 33 }) });
       return newArray;
