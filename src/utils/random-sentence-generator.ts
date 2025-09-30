@@ -1,16 +1,19 @@
-import { LoremIpsum } from "lorem-ipsum";
+const WORDS = [
+  "quick","brown","fox","jumps","over","lazy","dog","bright","stars","whisper",
+  "silent","code","runs","smooth","under","rustling","leaves","clever","minds",
+  "build","simple","tools","solve","hard","problems","swiftly","clear","constraints",
+  "useful","feedback","guides","progress","forward","every","tiny","choice","shapes",
+  "result","craft","matters","details","accumulate","quality","appears","naturally",
+  "test","early","iterate","often","ship","confidently","learn","improve","repeat"
+];
 
-const lorem = new LoremIpsum({
-  sentencesPerParagraph: {
-    max: 8,
-    min: 4,
-  },
-  wordsPerSentence: {
-    max: 16,
-    min: 4,
-  },
-});
+function randInt(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-export default function generateRandomSentence() {
-  return lorem.generateSentences(1);
+export default function generateRandomSentence(config: { minWords: number; maxWords: number }) {
+  const n = randInt(config.minWords, config.maxWords);
+  const words = Array.from({ length: n }, () => WORDS[randInt(0, WORDS.length - 1)]);
+  const s = words.join(" ");
+  return s.charAt(0).toUpperCase() + s.slice(1) + ".";
 }

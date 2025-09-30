@@ -1,4 +1,6 @@
 .container {
+  position: relative;
+
   display: flex;
   flex-direction: column;
   overflow-y: hidden;
@@ -12,5 +14,7 @@
 }
 
 .item {
-  padding: 16px;
+  padding-block: 8px;
+  padding-inline: 16px;
+  position: absolute;
 }

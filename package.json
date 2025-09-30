@@ -10,9 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "lorem-ipsum": "^2.0.8",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "sentence-engine": "^0.8.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

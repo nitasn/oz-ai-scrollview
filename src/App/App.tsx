@@ -14,7 +14,7 @@ export default function App() {
   const addMessage = () => {
     setMessages((messages) => {
       const newArray = messages.slice(-MAX_MESSAGES_TO_RENDER);
-      newArray.push({ id: newId(), text: generateRandomSentence() });
+      newArray.push({ id: newId(), text: generateRandomSentence({ minWords: 3, maxWords: 33 }) });
       return newArray;
     });
   };
