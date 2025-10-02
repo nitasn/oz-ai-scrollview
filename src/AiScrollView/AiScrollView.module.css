@@ -1,6 +1,6 @@
 .container {
   overflow-y: hidden;
-  
+
   display: flex;
   flex-direction: column;
   border: 1px solid #ccc;
@@ -24,4 +24,18 @@
   padding-block: 8px;
   padding-inline: 16px;
   position: absolute;
+
+  opacity: 0;
+  animation: fade-in ease-in-out forwards;
+  animation-duration: 600ms;
+  animation-delay: 100ms;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
