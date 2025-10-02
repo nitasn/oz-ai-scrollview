@@ -1,5 +1,5 @@
 import { useLayoutEffect } from "react";
-import useWeakMap from "../hooks/use-weak-map";
+import useMap from "../hooks/use-map";
 import styles from "./AiScrollView.module.css";
 
 export type AiScrollViewItem = {
@@ -16,7 +16,7 @@ export type AiScrollViewProps = {
  * If `items.length` is `maxItemsToRender + 1`, the oldest item will be faded out.
  */
 export default function AiScrollView({ items, maxItemsToRender }: AiScrollViewProps) {
-  const itemRefs = useWeakMap<AiScrollViewItem, HTMLDivElement>();
+  const itemRefs = useMap<AiScrollViewItem, HTMLDivElement>();
 
   useLayoutEffect(() => {
     if (items.length === 0) return;
@@ -58,7 +58,11 @@ export default function AiScrollView({ items, maxItemsToRender }: AiScrollViewPr
       {items.map((item) => (
         <div
           ref={(domElement) => {
-            domElement !== null && itemRefs.set(item, domElement);
+            if (domElement !== null) {
+              itemRefs.set(item, domElement);
+            } else {
+              itemRefs.delete(item);
+            }
           }}
           key={item.id}
           className={styles.item}
