@@ -1,16 +1,23 @@
 .container {
-  position: relative;
-
+  overflow-y: hidden;
+  
   display: flex;
   flex-direction: column;
-  overflow-y: hidden;
   border: 1px solid #ccc;
   border-radius: 4px;
-
   flex-grow: 1;
 
   background-color: rgb(246, 248, 248);
   box-shadow: rgba(0, 0, 0, 0.03) 0px 2px 4px 0px inset;
+}
+
+.floatingMessagesWrapper {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  transform: translateY(-50%);
 }
 
 .item {

@@ -24,8 +24,14 @@ export default function AiScrollView({ items, maxItemsToRender }: AiScrollViewPr
     const domElements = items.map((item) => itemRefs.get(item)!);
     const elementHeights = domElements.map((el) => el.getBoundingClientRect().height);
 
+    let sumVisibleHeights = 0; // sum the last `maxItemsToRender` heights
+    for (let i = Math.max(domElements.length - maxItemsToRender, 0); i < domElements.length; i++) {
+      sumVisibleHeights += elementHeights[i];
+    }
+    const offset = sumVisibleHeights / 2; // to center da tings in da div
+
     // set initial positions (last item just below the bottom) immediately
-    let accumHeight = -elementHeights[elementHeights.length - 1];
+    let accumHeight = -elementHeights[elementHeights.length - 1] - offset;
     for (let i = items.length - 1; i >= 0; i--) {
       domElements[i].style.bottom = `${accumHeight}px`;
       accumHeight += elementHeights[i];
@@ -40,7 +46,7 @@ export default function AiScrollView({ items, maxItemsToRender }: AiScrollViewPr
 
     requestAnimationFrame(() => {
       // set final positions (last item at bottom) with a transition
-      let accumHeight = 0;
+      let accumHeight = -offset;
       for (let i = items.length - 1; i >= 0; i--) {
         domElements[i].animate([{ bottom: `${accumHeight}px` }], translateTransistionConfig);
         accumHeight += elementHeights[i];
@@ -55,21 +61,23 @@ export default function AiScrollView({ items, maxItemsToRender }: AiScrollViewPr
 
   return (
     <div className={styles.container}>
-      {items.map((item) => (
-        <div
-          ref={(domElement) => {
-            if (domElement !== null) {
-              itemRefs.set(item, domElement);
-            } else {
-              itemRefs.delete(item);
-            }
-          }}
-          key={item.id}
-          className={styles.item}
-        >
-          <strong>{item.id}</strong>: {item.text}
-        </div>
-      ))}
+      <div className={styles.floatingMessagesWrapper}>
+        {items.map((item) => (
+          <div
+            ref={(domElement) => {
+              if (domElement !== null) {
+                itemRefs.set(item, domElement);
+              } else {
+                itemRefs.delete(item);
+              }
+            }}
+            key={item.id}
+            className={styles.item}
+          >
+            <strong>{item.id}</strong>: {item.text}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
